@@ -1,0 +1,9 @@
+{
+    "name": "ansi-esm",
+    "description": "ESM version",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@visulima/ansi": "workspace:*"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "name": "@foo/test-yarn",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "packageManager": "yarn@3.6.1"
+}

@@ -1,0 +1,7 @@
+{
+    "type": "module",
+    "scripts": {
+        "install": "node index.js"
+    },
+    "packageManager": "yarn@1.22.22"
+}

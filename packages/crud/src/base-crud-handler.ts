@@ -1,8 +1,9 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
+
 import type { HttpError } from "http-errors";
 import createHttpError from "http-errors";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ApiError } from "next/dist/server/api-utils";
-import type { IncomingMessage, ServerResponse } from "node:http";
 
 import createHandler from "./handler/create";
 import deleteHandler from "./handler/delete";
@@ -10,17 +11,18 @@ import listHandler from "./handler/list";
 import readHandler from "./handler/read";
 import updateHandler from "./handler/update";
 import parseQuery from "./query-parser";
-import type {
-    Adapter, ExecuteHandler, HandlerOptions, HandlerParameters, ParsedQueryParameters,
-} from "./types.d";
-import { RouteType } from "./types.d";
+import type { Adapter, ExecuteHandler, HandlerOptions, HandlerParameters, ParsedQueryParameters } from "./types";
+import { RouteType } from "./types";
 import formatResourceId from "./utils/format-resource-id";
 import getAccessibleRoutes from "./utils/get-accessible-routes";
 import { getResourceNameFromUrl } from "./utils/get-resource-name-from-url";
 import getRouteType from "./utils/get-route-type";
 import validateAdapterMethods from "./utils/validate-adapter-methods";
 
-type ResponseConfig = { status: number; data: any };
+interface ResponseConfig {
+    data: any;
+    status: number;
+}
 
 async function baseHandler<R extends Request, Context, T, Q extends ParsedQueryParameters = any, M extends string = string>(
     responseExecutor: (responseOrContext: Context, responseConfig: ResponseConfig) => Promise<Response>,
@@ -36,8 +38,14 @@ async function baseHandler<R extends IncomingMessage, RResponse extends ServerRe
     options?: HandlerOptions<M>,
 ): Promise<ExecuteHandler<R, RResponse>>;
 
-// eslint-disable-next-line sonarjs/cognitive-complexity,max-len
-async function baseHandler<R extends { url: string; method: string }, RResponse, T, Q extends ParsedQueryParameters = any, M extends string = string>(
+// eslint-disable-next-line sonarjs/cognitive-complexity,func-style
+async function baseHandler<
+    R extends { headers: { host?: string }; method: string; url: string },
+    RResponse,
+    T,
+    Q extends ParsedQueryParameters = any,
+    M extends string = string,
+>(
     responseExecutor: (responseOrContext: RResponse, responseConfig: ResponseConfig) => Promise<RResponse>,
     finalExecutor: (responseOrContext: RResponse) => Promise<void>,
     adapter: Adapter<T, Q>,
@@ -69,7 +77,7 @@ async function baseHandler<R extends { url: string; method: string }, RResponse,
     });
 
     return async (request, responseOrContext) => {
-        const { resourceName, modelName } = getResourceNameFromUrl(request.url, modelRoutes as { [key in M]: string });
+        const { modelName, resourceName } = getResourceNameFromUrl(request.url, modelRoutes as { [key in M]: string });
 
         if (!resourceName) {
             if (process.env.NODE_ENV === "development") {
@@ -83,7 +91,7 @@ async function baseHandler<R extends { url: string; method: string }, RResponse,
             throw createHttpError(404, `Resource not found: ${request.url}`);
         }
 
-        const { routeType, resourceId } = getRouteType(request.method, request.url, resourceName);
+        const { resourceId, routeType } = getRouteType(request.method, request.url, resourceName);
 
         if (routeType === null) {
             throw createHttpError(404, `Route not found: ${request.url}`);
@@ -102,7 +110,7 @@ async function baseHandler<R extends { url: string; method: string }, RResponse,
 
             await adapter.connect?.();
 
-            const parsedQuery = parseQuery(request.url);
+            const parsedQuery = parseQuery(`https://${request.headers.host?.replace(/\/$/u, "")}/${request.url}`);
             const parameters: HandlerParameters<T, Q> = {
                 adapter,
                 query: adapter.parseQuery(modelName as M, parsedQuery),
@@ -123,12 +131,12 @@ async function baseHandler<R extends { url: string; method: string }, RResponse,
                     case RouteType.READ_ALL: {
                         responseConfig = await (config.handlers?.list ?? listHandler)<T, Q>({
                             ...parameters,
+                            pagination: config.pagination,
                             query: {
                                 ...parameters.query,
-                                page: parsedQuery.page ? Number(parsedQuery.page) : undefined,
                                 limit: parsedQuery.limit ? Number(parsedQuery.limit) : undefined,
+                                page: parsedQuery.page ? Number(parsedQuery.page) : undefined,
                             },
-                            pagination: config.pagination,
                         });
                         break;
                     }
@@ -142,8 +150,8 @@ async function baseHandler<R extends { url: string; method: string }, RResponse,
                     case RouteType.UPDATE: {
                         responseConfig = await (config.handlers?.update ?? updateHandler)<T, Q, R>({
                             ...parameters,
-                            resourceId: resourceIdFormatted,
                             request: request as R & { body: Partial<T> },
+                            resourceId: resourceIdFormatted,
                         });
                         break;
                     }
@@ -156,8 +164,8 @@ async function baseHandler<R extends { url: string; method: string }, RResponse,
                     }
                     default: {
                         responseConfig = {
-                            status: 404,
                             data: "Method not found",
+                            status: 404,
                         };
                     }
                 }

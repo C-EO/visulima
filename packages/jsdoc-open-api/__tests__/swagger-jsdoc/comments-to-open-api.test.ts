@@ -4,6 +4,8 @@ import commentsToOpenApi from "../../src/swagger-jsdoc/comments-to-open-api";
 
 describe("commentsToOpenApi", () => {
     it("simple openapi", () => {
+        expect.assertions(1);
+
         const fileContents = `
 /**
  * @openapi
@@ -33,8 +35,9 @@ describe("commentsToOpenApi", () => {
 
         const result = commentsToOpenApi(fileContents);
 
-        expect(result).toEqual([
+        expect(result).toStrictEqual([
             {
+                loc: 2,
                 spec: {
                     paths: {
                         "/pets": {
@@ -74,12 +77,13 @@ describe("commentsToOpenApi", () => {
                         },
                     },
                 },
-                loc: 2,
             },
         ]);
     });
 
     it("simple asyncapi", () => {
+        expect.assertions(1);
+
         const fileContents = `
 /**
  * @asyncapi
@@ -121,27 +125,10 @@ describe("commentsToOpenApi", () => {
 
         const result = commentsToOpenApi(fileContents);
 
-        expect(result).toEqual([
+        expect(result).toStrictEqual([
             {
+                loc: 2,
                 spec: {
-                    components: {
-                        schemas: {
-                            user: {
-                                properties: {
-                                    age: {
-                                        format: "int32",
-                                        minimum: 0,
-                                        type: "integer",
-                                    },
-                                    name: {
-                                        type: "string",
-                                    },
-                                },
-                                required: ["name"],
-                                type: "object",
-                            },
-                        },
-                    },
                     channels: {
                         "/user/signedup": {
                             description: "This channel is used to exchange messages about users signing up",
@@ -172,13 +159,32 @@ describe("commentsToOpenApi", () => {
                             },
                         },
                     },
+                    components: {
+                        schemas: {
+                            user: {
+                                properties: {
+                                    age: {
+                                        format: "int32",
+                                        minimum: 0,
+                                        type: "integer",
+                                    },
+                                    name: {
+                                        type: "string",
+                                    },
+                                },
+                                required: ["name"],
+                                type: "object",
+                            },
+                        },
+                    },
                 },
-                loc: 2,
             },
         ]);
     });
 
     it("openapi with Square Bracket", () => {
+        expect.assertions(1);
+
         // eslint-disable-next-line no-secrets/no-secrets
         const fileContents = `
     /**
@@ -222,25 +228,20 @@ describe("commentsToOpenApi", () => {
  `;
         const result = commentsToOpenApi(fileContents);
 
-        expect(result).toEqual([
+        expect(result).toStrictEqual([
             {
+                loc: 7,
                 spec: {
                     paths: {
                         "/v1/getToken": {
                             get: {
                                 responses: {
                                     200: {
-                                        description: "successful operation",
                                         content: {
                                             "application/json": {
                                                 schema: {
-                                                    type: "object",
                                                     properties: {
-                                                        success: {
-                                                            type: "boolean",
-                                                        },
                                                         data: {
-                                                            type: "object",
                                                             items: {
                                                                 properties: {
                                                                     access_token: {
@@ -258,11 +259,17 @@ describe("commentsToOpenApi", () => {
                                                                     },
                                                                 },
                                                             },
+                                                            type: "object",
+                                                        },
+                                                        success: {
+                                                            type: "boolean",
                                                         },
                                                     },
+                                                    type: "object",
                                                 },
                                             },
                                         },
+                                        description: "successful operation",
                                     },
                                 },
                                 security: [],
@@ -271,12 +278,13 @@ describe("commentsToOpenApi", () => {
                         },
                     },
                 },
-                loc: 7,
             },
         ]);
     });
 
     it("openapi with formData", () => {
+        expect.assertions(1);
+
         const fileContents = `
 /**
  * @swagger
@@ -303,8 +311,9 @@ describe("commentsToOpenApi", () => {
 `;
         const result = commentsToOpenApi(fileContents);
 
-        expect(result).toEqual([
+        expect(result).toStrictEqual([
             {
+                loc: 2,
                 spec: {
                     paths: {
                         "/accessories-centers": {
@@ -328,13 +337,12 @@ describe("commentsToOpenApi", () => {
                                         description: "Returns Created accessories-Center",
                                     },
                                 },
-                                tags: ["Accessories-Centers"],
                                 summary: "Create a new Accessories center",
+                                tags: ["Accessories-Centers"],
                             },
                         },
                     },
                 },
-                loc: 2,
             },
         ]);
     });

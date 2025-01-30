@@ -3,3 +3,15 @@ node_modules
 inject-react-import.js
 coverage
 vitest.config.ts
+recipes
+__fixtures__
+.prettierrc.cjs
+_meta.*.json
+packem.config.ts
+
+package.json
+
+__docs__/quickstart.mdx
+
+bench
+README.md

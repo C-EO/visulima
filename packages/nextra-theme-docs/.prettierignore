@@ -1,6 +1,0 @@
-.gitkeep
-.env*
-*.ico
-*.lock
-dist
-CHANGELOG.md

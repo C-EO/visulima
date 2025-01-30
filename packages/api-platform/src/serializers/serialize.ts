@@ -1,5 +1,6 @@
-import accepts from "accepts";
 import type { IncomingMessage, ServerResponse } from "node:http";
+
+import accepts from "accepts";
 
 import { toHeaderCase } from "../utils";
 import hasJsonStructure from "./has-json-structure";
@@ -9,7 +10,6 @@ import type { Serializers } from "./types";
 
 const contentTypeKey = "Content-Type";
 
-// eslint-disable-next-line max-len
 const serialize = <Request extends IncomingMessage, Response extends ServerResponse>(
     serializers: Serializers,
     request: Request,
@@ -33,7 +33,6 @@ const serialize = <Request extends IncomingMessage, Response extends ServerRespo
     let serializedData = data;
     let breakTypes = false;
 
-    // eslint-disable-next-line no-restricted-syntax
     types.forEach((type) => {
         serializers.forEach(({ regex, serializer }) => {
             if (regex.test(type)) {

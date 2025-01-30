@@ -1,6 +1,3 @@
-export { default as transformDMMF } from "./transform-dmmf";
 export { default as getJSONSchemaProperty } from "./properties";
-
-export type {
-    DefinitionMap, PropertyMap, PropertyMetaData, TransformOptions, ModelMetaData,
-} from "./types.d";
+export { default as transformDMMF } from "./transform-dmmf";
+export type { DefinitionMap, ModelMetaData, PropertyMap, PropertyMetaData, TransformOptions } from "./types";

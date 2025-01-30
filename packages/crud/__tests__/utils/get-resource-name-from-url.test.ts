@@ -1,16 +1,22 @@
-import { expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { ensureCamelCase, getResourceNameFromUrl } from "../../src/utils/get-resource-name-from-url";
 
-it("should get the correct matching resource name", () => {
-    const url = "/api/foo";
+describe("getResourceNameFromUrl", () => {
+    it("should get the correct matching resource name", () => {
+        expect.assertions(1);
 
-    expect(getResourceNameFromUrl(url, { Foo: "foo" })).toEqual({
-        modelName: "Foo",
-        resourceName: "foo",
+        const url = "/api/foo";
+
+        expect(getResourceNameFromUrl(url, { Foo: "foo" })).toStrictEqual({
+            modelName: "Foo",
+            resourceName: "foo",
+        });
     });
-});
 
-it("should ensure the string is in camel case", () => {
-    expect(ensureCamelCase("FooBar")).toBe("fooBar");
+    it("should ensure the string is in camel case", () => {
+        expect.assertions(1);
+
+        expect(ensureCamelCase("FooBar")).toBe("fooBar");
+    });
 });

@@ -1,22 +1,27 @@
 import "cross-fetch/polyfill";
 
-import { describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
 import httpCheck from "../../src/checks/http-check";
+import { server } from "../../__fixtures__/mock-server";
 
 describe("httpCheck", () => {
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
     it("should return healthy when the host is reachable", async () => {
-        // eslint-disable-next-line sonarjs/no-duplicate-string
+        expect.assertions(1);
+
         const result = await httpCheck("https://example.com")();
 
         expect(result).toStrictEqual({
-            // eslint-disable-next-line sonarjs/no-duplicate-string
             displayName: "HTTP check for https://example.com",
             health: {
-                // eslint-disable-next-line sonarjs/no-duplicate-string
                 healthy: true,
-                // eslint-disable-next-line sonarjs/no-duplicate-string
+
                 message: "HTTP check for https://example.com was successful.",
+
                 timestamp: expect.any(String),
             },
             meta: {
@@ -28,11 +33,13 @@ describe("httpCheck", () => {
     }, 5000);
 
     it("should return healthy when the host is reachable with post method", async () => {
+        expect.assertions(1);
+
         const result = await httpCheck("https://example.com", {
+            expected: { status: 200 },
             fetchOptions: {
                 method: "POST",
             },
-            expected: { status: 200 },
         })();
 
         expect(result).toStrictEqual({
@@ -51,12 +58,14 @@ describe("httpCheck", () => {
     }, 5000);
 
     it("should return healthy when the host is reachable with post method and body", async () => {
+        expect.assertions(1);
+
         const result = await httpCheck("https://example.com", {
-            fetchOptions: {
-                method: "POST",
-                body: "hello world",
-            },
             expected: { status: 200 },
+            fetchOptions: {
+                body: "hello world",
+                method: "POST",
+            },
         })();
 
         expect(result).toStrictEqual({
@@ -75,6 +84,8 @@ describe("httpCheck", () => {
     }, 5000);
 
     it("should return unhealthy when the status is not the expected one", async () => {
+        expect.assertions(1);
+
         const result = await httpCheck("https://example.com", {
             expected: { status: 404 },
         })();
@@ -84,6 +95,7 @@ describe("httpCheck", () => {
             health: {
                 healthy: false,
                 message: "HTTP check for https://example.com returned status 200 instead of 404",
+
                 timestamp: expect.any(String),
             },
             meta: {
@@ -94,6 +106,8 @@ describe("httpCheck", () => {
     }, 5000);
 
     it("should return unhealthy when the body is not the expected one", async () => {
+        expect.assertions(1);
+
         const result = await httpCheck("https://example.com", {
             expected: { body: "hello world" },
         })();
@@ -102,7 +116,9 @@ describe("httpCheck", () => {
             displayName: "HTTP check for https://example.com",
             health: {
                 healthy: false,
+
                 message: expect.any(String),
+
                 timestamp: expect.any(String),
             },
             meta: {

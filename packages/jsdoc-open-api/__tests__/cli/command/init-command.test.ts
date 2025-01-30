@@ -1,17 +1,16 @@
 // eslint-disable-next-line import/no-namespace
 import * as fs from "node:fs";
 import { join } from "node:path";
-import {
-    describe, expect, it, vi,
-} from "vitest";
+
+import { describe, expect, it, vi } from "vitest";
 
 import initCommand from "../../../src/cli/command/init-command";
 
 vi.mock("node:fs", () => {
     return {
         existsSync: vi.fn(),
-        writeFileSync: vi.fn(),
         realpathSync: vi.fn(),
+        writeFileSync: vi.fn(),
     };
 });
 
@@ -19,14 +18,18 @@ const isWin = process.platform === "win32";
 
 describe("init command", () => {
     it("should throw an error when the config file already exists", () => {
+        expect.assertions(1);
+
         vi.spyOn(fs, "existsSync").mockReturnValue(true);
         vi.spyOn(console, "log");
 
         // Expect the function to throw an error
-        expect(() => initCommand("config.js")).toThrowError("Config file already exists");
+        expect(() => initCommand("config.js")).toThrow("Config file already exists");
     });
 
     it("should create a new config file with the correct module.exports content", () => {
+        expect.assertions(1);
+
         // Create a mock for the existsSync function to return false
         vi.spyOn(fs, "existsSync").mockReturnValue(false);
         vi.spyOn(console, "log");
@@ -77,11 +80,12 @@ describe("init command", () => {
     });
 
     it("should create a new config file with the correct export default content", () => {
+        expect.assertions(3);
+
         // Create a mock for the existsSync function to return false
         vi.spyOn(fs, "existsSync").mockReturnValue(false);
         vi.spyOn(console, "log");
 
-        // eslint-disable-next-line unicorn/prefer-module
         const fixturePath = join(__dirname, "../../../", "__fixtures__");
 
         vi.spyOn(fs, "realpathSync").mockReturnValue(fixturePath);
@@ -135,6 +139,8 @@ describe("init command", () => {
     });
 
     it("should log a message when the config file is created", () => {
+        expect.assertions(1);
+
         vi.spyOn(fs, "existsSync").mockReturnValue(false);
 
         const consoleLogMock = vi.spyOn(console, "log");

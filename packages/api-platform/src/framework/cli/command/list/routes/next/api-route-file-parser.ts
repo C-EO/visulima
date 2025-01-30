@@ -1,14 +1,21 @@
+import { readFileSync } from "node:fs";
+import { cwd as nodeCwd } from "node:process";
+
 import type { OpenApiObject } from "@visulima/jsdoc-open-api";
 import { jsDocumentCommentsToOpenApi, parseFile, swaggerJsDocumentCommentsToOpenApi } from "@visulima/jsdoc-open-api";
-import { readFileSync } from "node:fs";
-import process from "node:process";
+import { toNamespacedPath } from "@visulima/path";
 
-import type { Route } from "../types.d";
+import type { Route } from "../types";
 
-const extensionRegex = /\.(js|ts|mjs|cjs)$/;
+// eslint-disable-next-line regexp/no-unused-capturing-group
+const extensionRegex = /\.(js|ts|mjs|cjs)$/u;
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
-const apiRouteFileParser = (apiRouteFile: string, cwdPath: string, verbose: boolean = false): Route[] => {
+const apiRouteFileParser = (apiRouteFile: string, cwd: string, verbose = false): Route[] => {
+    // eslint-disable-next-line no-param-reassign
+    apiRouteFile = toNamespacedPath(apiRouteFile);
+
+    const cwdPath = toNamespacedPath(nodeCwd());
+
     let specs: OpenApiObject[] = [];
 
     const parsedJsDocumentFile = parseFile(apiRouteFile, jsDocumentCommentsToOpenApi, verbose);
@@ -24,8 +31,8 @@ const apiRouteFileParser = (apiRouteFile: string, cwdPath: string, verbose: bool
     if (specs.length === 0) {
         const apiRouteFileContent = readFileSync(apiRouteFile, "utf8");
 
-        apiRouteFileContent.split(/\r?\n/).forEach((line) => {
-            const match = /[=aces|]+\s["'|](GET|POST|PUT|PATCH|HEAD|DELETE|OPTIONS)["'|]/.exec(line);
+        apiRouteFileContent.split(/\r?\n/u).forEach((line) => {
+            const match = /[=aces|]+\s["'|](GET|POST|PUT|PATCH|HEAD|DELETE|OPTIONS)["'|]/u.exec(line);
 
             if (match) {
                 let [, method] = match;
@@ -35,20 +42,20 @@ const apiRouteFileParser = (apiRouteFile: string, cwdPath: string, verbose: bool
                 }
 
                 routes.push({
+                    file: apiRouteFile.replace(`${cwdPath}/`, ""),
                     method: method as string,
-                    path: apiRouteFile.replace(cwdPath, "").replace(extensionRegex, "").replaceAll("\\", "/"),
+                    path: toNamespacedPath(apiRouteFile.replace(cwd, "").replace(extensionRegex, "")),
                     tags: [],
-                    file: apiRouteFile.replace(`${process.cwd()}${process.platform === "win32" ? "\\" : "/"}`, ""),
                 });
             }
         });
 
         if (routes.length === 0) {
             routes.push({
+                file: apiRouteFile.replace(`${cwdPath}/`, ""),
                 method: "GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS",
-                path: apiRouteFile.replace(cwdPath, "").replace(extensionRegex, "").replaceAll("\\", "/"),
+                path: toNamespacedPath(apiRouteFile.replace(cwd, "").replace(extensionRegex, "")),
                 tags: [],
-                file: apiRouteFile.replace(`${process.cwd()}${process.platform === "win32" ? "\\" : "/"}`, ""),
             });
         }
 
@@ -56,17 +63,17 @@ const apiRouteFileParser = (apiRouteFile: string, cwdPath: string, verbose: bool
     }
 
     specs.forEach((spec) => {
-        const paths = Object.entries(spec.paths);
+        const paths = Object.entries(spec?.paths ?? {});
 
         paths.forEach(([path, pathSpec]) => {
             const methods = Object.entries(pathSpec);
 
             methods.forEach(([method, methodSpec]) => {
                 routes.push({
-                    path: path.replaceAll("\\", "/"),
+                    file: apiRouteFile.replace(`${cwdPath}/`, ""),
                     method: method.toUpperCase(),
+                    path: toNamespacedPath(path),
                     tags: methodSpec.tags,
-                    file: apiRouteFile.replace(`${process.cwd()}${process.platform === "win32" ? "\\" : "/"}`, ""),
                 });
             });
         });

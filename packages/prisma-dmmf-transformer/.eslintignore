@@ -1,6 +1,14 @@
 dist
 node_modules
-coverage
 inject-react-import.js
-__fixtures__/**
+coverage
 vitest.config.ts
+recipes
+__fixtures__
+.prettierrc.cjs
+_meta.*.json
+packem.config.ts
+
+README.md
+
+package.json

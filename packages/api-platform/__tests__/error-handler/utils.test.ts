@@ -6,6 +6,8 @@ import { addStatusCodeToResponse, sendJson, setErrorHeaders } from "../../src/er
 
 describe("error-handler/utils", () => {
     it("should set error headers", () => {
+        expect.assertions(1);
+
         const { res } = createMocks({
             method: "GET",
         });
@@ -25,6 +27,8 @@ describe("error-handler/utils", () => {
     });
 
     it("should send json", () => {
+        expect.assertions(1);
+
         const { res } = createMocks({
             method: "GET",
         });
@@ -32,10 +36,12 @@ describe("error-handler/utils", () => {
         sendJson(res, { test: "test" });
 
         // eslint-disable-next-line no-underscore-dangle
-        expect(res._getData()).toStrictEqual('{"test":"test"}');
+        expect(res._getData()).toBe('{"test":"test"}');
     });
 
     it("should add status code to response", () => {
+        expect.assertions(1);
+
         const { res } = createMocks({
             method: "GET",
         });

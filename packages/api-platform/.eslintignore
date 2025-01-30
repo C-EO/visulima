@@ -5,3 +5,13 @@ coverage
 vitest.config.ts
 recipes
 __fixtures__
+.prettierrc.cjs
+_meta.*.json
+tsup.config.ts
+README.md
+
+package.json
+
+scripts/wait.js
+
+tsconfig.eslint.json

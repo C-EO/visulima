@@ -4,16 +4,20 @@ import yamlLoc from "../src/util/yaml-loc";
 
 describe("yamlLoc", () => {
     it("handles simplest case", () => {
+        expect.assertions(1);
+
         const yaml = `
     simple:
       example: "hi"
     `;
         const count = yamlLoc(yaml);
 
-        expect(count).toStrictEqual(2);
+        expect(count).toBe(2);
     });
 
     it("strips newlines", () => {
+        expect.assertions(1);
+
         const yaml = `
     simple1:
       example: "hi"
@@ -23,10 +27,12 @@ describe("yamlLoc", () => {
     `;
         const count = yamlLoc(yaml);
 
-        expect(count).toStrictEqual(4);
+        expect(count).toBe(4);
     });
 
     it("strips comments", () => {
+        expect.assertions(1);
+
         const yaml = `
     # a comment
     simple1:
@@ -38,10 +44,12 @@ describe("yamlLoc", () => {
     `;
         const count = yamlLoc(yaml);
 
-        expect(count).toStrictEqual(4);
+        expect(count).toBe(4);
     });
 
     it("strips indented comments", () => {
+        expect.assertions(1);
+
         const yaml = `
     simple:
       #a comment
@@ -49,26 +57,30 @@ describe("yamlLoc", () => {
     `;
         const count = yamlLoc(yaml);
 
-        expect(count).toStrictEqual(2);
+        expect(count).toBe(2);
     });
 
     it("doesn't strip inline comments", () => {
+        expect.assertions(1);
+
         const yaml = `
     simple: # a comment
       example: "hi"
     `;
         const count = yamlLoc(yaml);
 
-        expect(count).toStrictEqual(2);
+        expect(count).toBe(2);
     });
 
     it("doesn't strip components string", () => {
+        expect.assertions(1);
+
         const yaml = `
     simple:
       example: "#/components/one/hi"
     `;
         const count = yamlLoc(yaml);
 
-        expect(count).toStrictEqual(2);
+        expect(count).toBe(2);
     });
 });

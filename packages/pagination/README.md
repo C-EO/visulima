@@ -53,7 +53,7 @@ const pagination = paginate(1, 5, items.length, items);
 
 console.log(pagination);
 // {
-//   items: [1, 2, 3, 4, 5],
+//   data: [1, 2, 3, 4, 5],
 //   meta: {
 //     total: 10,
 //     perPage: 5,
@@ -82,16 +82,16 @@ If you would like to help take a look at the [list of issues](https://github.com
 
 ## Credits
 
--   [Daniel Bannert](https://github.com/prisis)
--   [All Contributors](https://github.com/visulima/visulima/graphs/contributors)
+- [Daniel Bannert](https://github.com/prisis)
+- [All Contributors](https://github.com/visulima/visulima/graphs/contributors)
 
 ## License
 
 The visulima pagination is open-sourced software licensed under the [MIT][license-url]
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
-[typescript-url]: "typescript"
+[typescript-url]: https://www.typescriptlang.org/ "TypeScript" "typescript"
 [license-image]: https://img.shields.io/npm/l/@visulima/pagination?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md "license"
-[npm-image]: https://img.shields.io/npm/v/@visulima/pagination/alpha.svg?style=for-the-badge&logo=npm
-[npm-url]: https://www.npmjs.com/package/@visulima/pagination/v/alpha "npm"
+[npm-image]: https://img.shields.io/npm/v/@visulima/pagination/latest.svg?style=for-the-badge&logo=npm
+[npm-url]: https://www.npmjs.com/package/@visulima/pagination/v/latest "npm"

@@ -1,9 +1,9 @@
-import set from "lodash.set";
-import { parse } from "node:url";
+import { URL } from "node:url";
 
-import type {
-    OrderByField, ParsedQueryParameters, RecursiveField, WhereField,
-} from "./types.d";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { setProperty } from "dot-prop";
+
+import type { OrderByField, ParsedQueryParameters, RecursiveField, WhereField } from "./types";
 
 const parseRecursive = (select: string): RecursiveField => {
     const selectFields: RecursiveField = {};
@@ -11,7 +11,7 @@ const parseRecursive = (select: string): RecursiveField => {
     const fields = select.split(",");
 
     fields.forEach((field) => {
-        set(selectFields, field, true);
+        setProperty(selectFields, field, true);
     });
 
     return selectFields;
@@ -22,7 +22,7 @@ const parseWhere = (where: string): WhereField => {
     const parsed: WhereField = {};
 
     Object.keys(whereObject).forEach((key) => {
-        set(parsed, key, whereObject[key]);
+        setProperty(parsed, key, whereObject[key]);
     });
 
     return parsed;
@@ -48,44 +48,45 @@ const parseOrderBy = (orderBy: string): OrderByField => {
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const parseQuery = (queryString?: string): ParsedQueryParameters => {
-    if (queryString) {
-        const { query } = parse(queryString, true);
+const parseQuery = (url?: string): ParsedQueryParameters => {
+    if (url) {
+        const { searchParams } = new URL(url);
         const parsedQuery: ParsedQueryParameters = {};
 
-        if (query["select"]) {
-            parsedQuery.select = parseRecursive(query["select"] as string);
+        if (searchParams.get("select")) {
+            parsedQuery.select = parseRecursive(searchParams.get("select") as string);
         }
 
-        if (query["include"]) {
-            parsedQuery.include = parseRecursive(query["include"] as string);
+        if (searchParams.get("include")) {
+            parsedQuery.include = parseRecursive(searchParams.get("include") as string);
         }
 
-        if (query["where"]) {
-            parsedQuery.where = parseWhere(query["where"] as string);
+        if (searchParams.get("where")) {
+            parsedQuery.where = parseWhere(searchParams.get("where") as string);
         }
 
-        if (query["orderBy"]) {
-            parsedQuery.orderBy = parseOrderBy(query["orderBy"] as string);
+        if (searchParams.get("orderBy")) {
+            parsedQuery.orderBy = parseOrderBy(searchParams.get("orderBy") as string);
         }
 
-        if (query["limit"] !== undefined) {
-            parsedQuery.limit = Number.isFinite(+query["limit"]) ? +query["limit"] : undefined;
-        }
-        if (query["skip"] !== undefined) {
-            parsedQuery.skip = Number.isFinite(+query["skip"]) ? +query["skip"] : undefined;
+        if (searchParams.has("limit")) {
+            parsedQuery.limit = Number.isFinite(+(searchParams.get("limit") as string)) ? +(searchParams.get("limit") as string) : undefined;
         }
 
-        if (query["distinct"]) {
-            parsedQuery.distinct = query["distinct"] as string;
+        if (searchParams.has("skip")) {
+            parsedQuery.skip = Number.isFinite(+(searchParams.get("skip") as string)) ? +(searchParams.get("skip") as string) : undefined;
         }
 
-        if (query["page"]) {
-            parsedQuery.page = Number.isFinite(+query["page"]) ? +query["page"] : undefined;
+        if (searchParams.get("distinct")) {
+            parsedQuery.distinct = searchParams.get("distinct") as string;
+        }
+
+        if (searchParams.get("page")) {
+            parsedQuery.page = Number.isFinite(+(searchParams.get("page") as string)) ? +(searchParams.get("page") as string) : undefined;
         }
 
         return {
-            originalQuery: query,
+            originalQuery: Object.fromEntries(searchParams.entries()),
             ...parsedQuery,
         };
     }

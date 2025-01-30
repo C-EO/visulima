@@ -1,0 +1,324 @@
+{
+    "name": "@visulima/pail",
+    "version": "2.1.21",
+    "description": "Highly configurable Logger for Node.js, Edge and Browser.",
+    "keywords": [
+        "ansi",
+        "anolilab",
+        "browser",
+        "browser-logger",
+        "callsite",
+        "callsites",
+        "cli",
+        "color",
+        "colorful",
+        "colorize",
+        "consola",
+        "console",
+        "console-logger",
+        "debug",
+        "error-logging",
+        "file-logger",
+        "file-logging",
+        "filesystem-logger",
+        "filter",
+        "fs-logger",
+        "handling exceptions",
+        "json",
+        "json-logger",
+        "json-logging",
+        "log level",
+        "log",
+        "log-cleaner",
+        "log-rotation",
+        "log4j",
+        "log4js",
+        "log4ts",
+        "logger",
+        "logging",
+        "node",
+        "stream",
+        "pretty",
+        "node-logger",
+        "pail",
+        "pino",
+        "pretty-error",
+        "pretty-log",
+        "print",
+        "progress",
+        "redact",
+        "rotating-log",
+        "show error",
+        "timer",
+        "universal",
+        "visulima",
+        "warning-logging",
+        "winston"
+    ],
+    "homepage": "https://www.visulima.com/docs/package/pail",
+    "bugs": {
+        "url": "https://github.com/visulima/visulima/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/visulima/visulima.git",
+        "directory": "packages/pail"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/prisis"
+        },
+        {
+            "type": "consulting",
+            "url": "https://anolilab.com/support"
+        }
+    ],
+    "license": "MIT",
+    "author": {
+        "name": "Daniel Bannert",
+        "email": "d.bannert@anolilab.de",
+        "url": "https://danielbannert.com"
+    },
+    "sideEffects": false,
+    "type": "module",
+    "exports": {
+        ".": {
+            "browser": "./dist/index.browser.mjs",
+            "require": {
+                "types": "./dist/index.server.d.cts",
+                "default": "./dist/index.server.cjs"
+            },
+            "import": {
+                "types": "./dist/index.server.d.mts",
+                "default": "./dist/index.server.mjs"
+            }
+        },
+        "./browser": {
+            "require": {
+                "types": "./dist/index.browser.d.cts",
+                "default": "./dist/index.browser.cjs"
+            },
+            "import": {
+                "types": "./dist/index.browser.d.mts",
+                "default": "./dist/index.browser.mjs"
+            }
+        },
+        "./server": {
+            "require": {
+                "types": "./dist/index.server.d.cts",
+                "default": "./dist/index.server.cjs"
+            },
+            "import": {
+                "types": "./dist/index.server.d.mts",
+                "default": "./dist/index.server.mjs"
+            }
+        },
+        "./reporter": {
+            "browser": "./dist/reporter.browser.mjs",
+            "require": {
+                "types": "./dist/reporter.server.d.cts",
+                "default": "./dist/reporter.server.cjs"
+            },
+            "import": {
+                "types": "./dist/reporter.server.d.mts",
+                "default": "./dist/reporter.server.mjs"
+            }
+        },
+        "./server/reporter": {
+            "require": {
+                "types": "./dist/reporter.server.d.cts",
+                "default": "./dist/reporter.server.cjs"
+            },
+            "import": {
+                "types": "./dist/reporter.server.d.mts",
+                "default": "./dist/reporter.server.mjs"
+            }
+        },
+        "./browser/reporter": {
+            "browser": "./dist/reporter.browser.mjs",
+            "require": {
+                "types": "./dist/reporter.browser.d.cts",
+                "default": "./dist/reporter.browser.cjs"
+            },
+            "import": {
+                "types": "./dist/reporter.browser.d.mts",
+                "default": "./dist/reporter.browser.mjs"
+            }
+        },
+        "./processor": {
+            "browser": "./dist/processor.browser.mjs",
+            "require": {
+                "types": "./dist/processor.server.d.cts",
+                "default": "./dist/processor.server.cjs"
+            },
+            "import": {
+                "types": "./dist/processor.server.d.mts",
+                "default": "./dist/processor.server.mjs"
+            }
+        },
+        "./server/processor": {
+            "require": {
+                "types": "./dist/processor.server.d.cts",
+                "default": "./dist/processor.server.cjs"
+            },
+            "import": {
+                "types": "./dist/processor.server.d.mts",
+                "default": "./dist/processor.server.mjs"
+            }
+        },
+        "./browser/processor": {
+            "browser": "./dist/processor.browser.mjs",
+            "require": {
+                "types": "./dist/processor.browser.d.cts",
+                "default": "./dist/processor.browser.cjs"
+            },
+            "import": {
+                "types": "./dist/processor.browser.d.mts",
+                "default": "./dist/processor.browser.mjs"
+            }
+        },
+        "./package.json": "./package.json"
+    },
+    "main": "dist/index.server.cjs",
+    "module": "dist/index.server.mjs",
+    "browser": "dist/index.browser.mjs",
+    "types": "dist/index.server.d.ts",
+    "typesVersions": {
+        ">=5.0": {
+            ".": [
+                "./dist/index.browser.d.ts",
+                "./dist/index.server.d.ts"
+            ],
+            "browser": [
+                "./dist/index.browser.d.ts"
+            ],
+            "server": [
+                "./dist/index.server.d.ts"
+            ],
+            "reporter": [
+                "./dist/reporter.browser.d.ts",
+                "./dist/reporter.server.d.ts"
+            ],
+            "browser/reporter": [
+                "./dist/reporter.browser.d.ts"
+            ],
+            "server/reporter": [
+                "./dist/reporter.server.d.ts"
+            ],
+            "processor": [
+                "./dist/processor.browser.d.ts",
+                "./dist/processor.server.d.ts"
+            ],
+            "browser/processor": [
+                "./dist/processor.browser.d.ts"
+            ],
+            "server/processor": [
+                "./dist/processor.server.d.ts"
+            ]
+        }
+    },
+    "files": [
+        "dist/**",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE.md"
+    ],
+    "scripts": {
+        "build": "cross-env NODE_ENV=development packem build",
+        "build:prod": "cross-env NODE_ENV=production packem build",
+        "clean": "rimraf node_modules dist .eslintcache",
+        "dev": "pnpm run build --watch",
+        "lint:attw": "attw --pack",
+        "lint:eslint": "eslint . --ext js,cjs,mjs,jsx,ts,tsx,json,yaml,yml,md,mdx --max-warnings=0 --config .eslintrc.cjs",
+        "lint:eslint:fix": "eslint . --ext js,cjs,mjs,jsx,ts,tsx,json,yaml,yml,md,mdx --max-warnings=0 --config .eslintrc.cjs --fix",
+        "lint:package-json": "publint --strict",
+        "lint:prettier": "prettier --config=.prettierrc.cjs --check .",
+        "lint:prettier:fix": "prettier --config=.prettierrc.cjs --write .",
+        "lint:types": "tsc --noEmit || exit 0",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "test:ui": "vitest --ui --coverage.enabled=true",
+        "test:watch": "vitest"
+    },
+    "dependencies": {
+        "@visulima/colorize": "1.4.20",
+        "@visulima/error": "4.4.15",
+        "@visulima/fmt": "1.1.14",
+        "@visulima/inspector": "1.0.20",
+        "safe-stable-stringify": "^2.5.0"
+    },
+    "devDependencies": {
+        "@anolilab/eslint-config": "^15.0.3",
+        "@anolilab/prettier-config": "^5.0.14",
+        "@anolilab/semantic-release-pnpm": "^1.1.9",
+        "@anolilab/semantic-release-preset": "^10.0.2",
+        "@arethetypeswrong/cli": "^0.17.3",
+        "@babel/core": "^7.26.0",
+        "@rushstack/eslint-plugin-security": "^0.8.3",
+        "@secretlint/secretlint-rule-preset-recommend": "^9.0.0",
+        "@total-typescript/ts-reset": "^0.6.1",
+        "@types/node": "18.19.71",
+        "@visulima/packem": "1.18.0",
+        "@visulima/redact": "1.0.13",
+        "@vitest/coverage-v8": "^3.0.4",
+        "@vitest/ui": "^3.0.4",
+        "conventional-changelog-conventionalcommits": "8.0.0",
+        "cross-env": "^7.0.3",
+        "esbuild": "0.24.2",
+        "eslint": "8.57.0",
+        "eslint-plugin-deprecation": "^3.0.0",
+        "eslint-plugin-etc": "^2.0.3",
+        "eslint-plugin-import": "npm:eslint-plugin-i@^2.29.1",
+        "eslint-plugin-mdx": "^3.1.5",
+        "eslint-plugin-vitest": "0.4.1",
+        "eslint-plugin-vitest-globals": "^1.5.0",
+        "prettier": "^3.4.2",
+        "rimraf": "6.0.1",
+        "rotating-file-stream": "^3.2.5",
+        "secretlint": "9.0.0",
+        "semantic-release": "24.2.1",
+        "string-length": "^6.0.0",
+        "terminal-size": "^4.0.0",
+        "type-fest": "^4.33.0",
+        "typescript": "5.7.3",
+        "vitest": "^3.0.4",
+        "wrap-ansi": "^9.0.0"
+    },
+    "peerDependencies": {
+        "@visulima/redact": "1.0.13",
+        "rotating-file-stream": "^3.1.1"
+    },
+    "peerDependenciesMeta": {
+        "@visulima/redact": {
+            "optional": true
+        },
+        "rotating-file-stream": {
+            "optional": true
+        }
+    },
+    "engines": {
+        "node": ">=18.0.0 <=23.x"
+    },
+    "os": [
+        "darwin",
+        "linux",
+        "win32"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
+    "anolilab": {
+        "eslint-config": {
+            "plugin": {
+                "tsdoc": false
+            },
+            "warn_on_unsupported_typescript_version": false,
+            "info_on_disabling_jsx_react_rule": false,
+            "info_on_disabling_prettier_conflict_rule": false,
+            "info_on_disabling_jsonc_sort_keys_rule": false,
+            "info_on_disabling_etc_no_deprecated": false
+        }
+    }
+}

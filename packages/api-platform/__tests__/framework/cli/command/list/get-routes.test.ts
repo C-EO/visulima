@@ -1,20 +1,13 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { Server } from "@hapi/hapi";
 import Hapi from "@hapi/hapi";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import Router from "@koa/router";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { Express } from "express";
 import express from "express";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { FastifyInstance } from "fastify";
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line import/no-named-as-default
 import fastify from "fastify";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import Koa from "koa";
-import {
-    beforeEach, describe, expect, it,
-} from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { getRoutes } from "../../../../../src/framework/cli/command/list/get-routes";
 
@@ -27,19 +20,20 @@ describe("getRoutes", () => {
 
             app.get("/", (_request, response) => response.sendStatus(200));
             app.get("/activity", (_request, response) => response.sendStatus(200));
-            // eslint-disable-next-line sonarjs/no-duplicate-string
+
             app.get("/activity/:id", (_request, response) => response.sendStatus(200));
 
-            // eslint-disable-next-line sonarjs/no-duplicate-string
             app.get("/users", (_request, response) => response.sendStatus(200));
-            // eslint-disable-next-line sonarjs/no-duplicate-string
+
             app.get("/users/:id", (_request, response) => response.sendStatus(200));
             app.put("/users/:id", (_request, response) => response.sendStatus(200));
-            // eslint-disable-next-line sonarjs/no-duplicate-string
+
             app.get("/users/following", (_request, response) => response.sendStatus(200));
         });
 
-        it("Express Routes", async () => {
+        it("express Routes", async () => {
+            expect.assertions(1);
+
             const actualRoutesMap = await getRoutes(app, "express", false);
 
             expect(actualRoutesMap).toMatchSnapshot();
@@ -64,11 +58,14 @@ describe("getRoutes", () => {
             router.get("/users/following", () => {});
 
             app.use(router.routes());
+
             // eslint-disable-next-line no-console
             app.use(() => console.log("Non-router middleware"));
         });
 
-        it("Koa Routes", async () => {
+        it("koa Routes", async () => {
+            expect.assertions(1);
+
             const actualRoutesMap = await getRoutes(app, "koa", false);
 
             expect(actualRoutesMap).toMatchSnapshot();
@@ -80,48 +77,50 @@ describe("getRoutes", () => {
 
         beforeEach(() => {
             app = Hapi.server({
-                port: 8080,
                 host: "localhost",
+                port: 8080,
             });
 
             app.route({
+                handler: () => null,
                 method: "GET",
                 path: "/",
-                handler: () => null,
             });
 
             app.route({
+                handler: () => null,
                 method: "GET",
                 path: "/activity",
-                handler: () => null,
             });
 
             app.route({
+                handler: () => null,
                 method: "GET",
                 path: "/activity/:id",
-                handler: () => null,
             });
 
             app.route({
+                handler: () => null,
                 method: "GET",
                 path: "/users",
-                handler: () => null,
             });
 
             app.route({
+                handler: () => null,
                 method: ["GET", "PUT"],
                 path: "/users/:id",
-                handler: () => null,
             });
 
             app.route({
+                handler: () => null,
                 method: "GET",
                 path: "/users/following",
-                handler: () => null,
             });
         });
 
-        it("Hapi Routes", async () => {
+        it("hapi Routes", async () => {
+            expect.assertions(1);
+
             const actualRoutesMap = await getRoutes(app, "hapi", false);
 
             expect(actualRoutesMap).toMatchSnapshot();
@@ -144,7 +143,9 @@ describe("getRoutes", () => {
             app.get("/users/following", (_request, response) => response.status(200));
         });
 
-        it("Fastify Routes", async () => {
+        it("fastify Routes", async () => {
+            expect.assertions(1);
+
             const actualRoutesMap = await getRoutes(app, "fastify", false);
 
             expect(actualRoutesMap).toMatchSnapshot();

@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { parse as urlParse } from "node:url";
+import { URL } from "node:url";
 
 type IncomingApiRequest<TApiRequest = IncomingMessage> = TApiRequest & {
     body?: any;
@@ -19,7 +19,7 @@ export const parseBody = async (request: IncomingApiRequest): Promise<any> => {
 
     const buffers = [];
 
-    // eslint-disable-next-line no-restricted-syntax
+    // eslint-disable-next-line no-restricted-syntax,no-loops/no-loops
     for await (const chunk of request) {
         buffers.push(chunk);
     }
@@ -29,17 +29,25 @@ export const parseBody = async (request: IncomingApiRequest): Promise<any> => {
     return data ? JSON.parse(data) : null;
 };
 
-export const parseQuery = (request: IncomingApiRequest): unknown => {
+export const parseQuery = (request: IncomingApiRequest): Record<string, unknown> => {
     if (request.query) {
         return request.query;
     }
 
-    return urlParse(request.url ?? "", true).query;
+    if (!request.url) {
+        return {};
+    }
+
+    // Note: Fake protocol is required to parse query string
+    const url = new URL(`https://${request.headers.host?.replace(/\/$/u, "")}/${request.url}`);
+
+    return Object.fromEntries(url.searchParams.entries());
 };
 
-export const toHeaderCase = (string_: string): string => string_
-    .toLowerCase()
-    .replaceAll(/[^\s\w]/g, " ") // Remove all non-word characters
-    .trimEnd() // Remove trailing spaces
-    .replaceAll(/\s+|_/g, "-") // Replace multiple spaces or underline with a single hyphen
-    .replaceAll(/\b\w/g, (c) => c.toUpperCase());
+export const toHeaderCase = (string_: string): string =>
+    string_
+        .toLowerCase()
+        .replaceAll(/[^\s\w]/gu, " ") // Remove all non-word characters
+        .trimEnd() // Remove trailing spaces
+        .replaceAll(/\s+|_/gu, "-") // Replace multiple spaces or underline with a single hyphen
+        .replaceAll(/\b\w/gu, (c) => c.toUpperCase());

@@ -3,30 +3,27 @@ import { describe, expect, it } from "vitest";
 import type { PrismaRecursive } from "../../../../src/adapter/prisma/types";
 import parsePrismaRecursiveField from "../../../../src/adapter/prisma/utils/parse-recursive";
 
-describe("Prisma parse recursive", () => {
+describe("prisma parse recursive", () => {
     it("should parse select to prisma select", () => {
+        expect.assertions(1);
+
         expect(
             parsePrismaRecursiveField(
                 {
                     post: true,
-                    user: {
-                        post: true,
-                    },
                     session: {
                         user: {
                             post: true,
                         },
                     },
+                    user: {
+                        post: true,
+                    },
                 },
                 "select",
             ),
-        ).toEqual<PrismaRecursive<"select">>({
+        ).toStrictEqual<PrismaRecursive<"select">>({
             post: true,
-            user: {
-                select: {
-                    post: true,
-                },
-            },
             session: {
                 select: {
                     user: {
@@ -36,32 +33,34 @@ describe("Prisma parse recursive", () => {
                     },
                 },
             },
+            user: {
+                select: {
+                    post: true,
+                },
+            },
         });
     });
 
     it("should parse include to prisma include", () => {
+        expect.assertions(1);
+
         expect(
             parsePrismaRecursiveField(
                 {
                     post: true,
-                    user: {
-                        post: true,
-                    },
                     session: {
                         user: {
                             post: true,
                         },
                     },
+                    user: {
+                        post: true,
+                    },
                 },
                 "include",
             ),
-        ).toEqual<PrismaRecursive<"include">>({
+        ).toStrictEqual<PrismaRecursive<"include">>({
             post: true,
-            user: {
-                include: {
-                    post: true,
-                },
-            },
             session: {
                 include: {
                     user: {
@@ -69,6 +68,11 @@ describe("Prisma parse recursive", () => {
                             post: true,
                         },
                     },
+                },
+            },
+            user: {
+                include: {
+                    post: true,
                 },
             },
         });

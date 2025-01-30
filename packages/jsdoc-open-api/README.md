@@ -45,7 +45,7 @@ pnpm add @visulima/jsdoc-open-api
 
 Choose the syntax you want to use for your OpenAPI definitions:
 
-![choose the syntax](./assets/swagger-difference.png)
+![choose the syntax](./__assets__/swagger-difference.png)
 
 ### CLI:
 
@@ -330,15 +330,15 @@ components:
 
 Supported authentication methods are:
 
--   HTTP authentication: Basic, Bearer, and so on.
--   API key as a header or query parameter or in cookies
--   OAuth 2
--   OpenID Connect Discovery
+- HTTP authentication: Basic, Bearer, and so on.
+- API key as a header or query parameter or in cookies
+- OAuth 2
+- OpenID Connect Discovery
 
 For more information, see [Authentication](/docs/short/authentication.md).
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
-[typescript-url]: "typescript"
+[typescript-url]: https://www.typescriptlang.org/ "TypeScript" "typescript"
 [license-image]: https://img.shields.io/npm/l/@visulima/jsdoc-open-api?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md "license"
 [npm-image]: https://img.shields.io/npm/v/@visulima/jsdoc-open-api/latest.svg?style=for-the-badge&logo=npm

@@ -1,29 +1,26 @@
-import type {
-    Condition, SearchCondition, WhereCondition, WhereField, WhereOperator,
-} from "../../../types.d";
+import type { Condition, SearchCondition, WhereCondition, WhereField, WhereOperator } from "../../../types";
 import isPrimitive from "../../../utils/is-primitive";
-import type {
-    PrismaFieldFilter, PrismaRelationFilter, PrismaWhereField, PrismaWhereOperator,
-} from "../types.d";
+import type { PrismaFieldFilter, PrismaRelationFilter, PrismaWhereField, PrismaWhereOperator } from "../types";
 
 const isObject = (a: any) => a instanceof Object;
 
 const operatorsAssociation: {
     [key in WhereOperator]?: PrismaWhereOperator;
 } = {
-    $eq: "equals",
-    $neq: "not",
     $cont: "contains",
     $ends: "endsWith",
+    $eq: "equals",
     $gt: "gt",
     $gte: "gte",
     $in: "in",
     $lt: "lt",
     $lte: "lte",
+    $neq: "not",
     $notin: "notIn",
     $starts: "startsWith",
 };
 
+// eslint-disable-next-line security/detect-unsafe-regex,regexp/no-useless-flag
 const isDateString = (value: string) => /^\d{4}-[01]\d-[0-3]\d(?:T[0-2](?:\d:[0-5]){2}\d(?:\.\d+)?(?:Z|[+-][0-2]\d(?::?[0-5]\d)?)?)?$/g.test(value);
 
 const getSearchValue = (originalValue: any): SearchCondition => {
@@ -35,25 +32,26 @@ const getSearchValue = (originalValue: any): SearchCondition => {
         return null;
     }
 
-    return originalValue;
+    return originalValue as SearchCondition;
 };
 
 const isRelation = (key: string, manyRelations: string[]): boolean => {
     // Get the key containing . and remove the property name
     const splitKey = key.split(".");
+
     splitKey.splice(-1, 1);
 
     return manyRelations.includes(splitKey.join("."));
 };
 
-const parseSimpleField = (value: Condition): { [key: string]: Condition } | undefined => {
+const parseSimpleField = (value: Condition): Record<string, Condition> | undefined => {
     const operator = Object.keys(value)[0];
     const prismaOperator: PrismaWhereOperator | undefined = operatorsAssociation[operator as keyof typeof operatorsAssociation];
 
     if (prismaOperator) {
         return {
             [prismaOperator]: value[operator as string],
-        };
+        } as Record<string, Condition>;
     }
 
     return undefined;
@@ -66,9 +64,10 @@ const parseRelation = (
     manyRelations: string[],
 ) => {
     // Reverse the keys so that we can format our object by nesting
+    // eslint-disable-next-line etc/no-assign-mutated-array
     const fields = key.split(".").reverse();
 
-    let formatFields: { [key: string]: any } = {};
+    let formatFields: Record<string, any> = {};
 
     fields.forEach((field, index) => {
         // If we iterate over the property name, which is index 0, we parse it like a normal field
@@ -86,6 +85,7 @@ const parseRelation = (
     });
 
     // Retrieve the main relation field
+    // eslint-disable-next-line etc/no-assign-mutated-array
     const initialFieldKey = fields.reverse()[0] as string;
     // Retrieve the old parsed version
     const oldParsed = parsed[initialFieldKey] as PrismaRelationFilter;
@@ -108,7 +108,7 @@ const parseObjectCombination = (object: Condition, manyRelations: string[]): Pri
         const value = object[key];
 
         if (isRelation(key, manyRelations)) {
-            parseRelation(value, key, parsed, manyRelations);
+            parseRelation(value as WhereCondition, key, parsed, manyRelations);
         } else if (isPrimitive(value)) {
             parsed[key] = value as SearchCondition;
         } else if (isObject(value)) {
@@ -186,9 +186,9 @@ const parsePrismaWhere = (where: WhereField, manyRelations: string[]): PrismaWhe
          * }
          */
         if (isRelation(key, manyRelations)) {
-            parseRelation(value, key, parsed, manyRelations);
+            parseRelation(value as WhereCondition, key, parsed, manyRelations);
         } else {
-            basicParse(value, key, parsed, manyRelations);
+            basicParse(value as Condition, key, parsed, manyRelations);
         }
     });
 

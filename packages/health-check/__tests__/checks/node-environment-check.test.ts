@@ -4,25 +4,29 @@ import nodeEnvironmentCheck from "../../src/checks/node-environment-check";
 
 describe("node-environment-check", () => {
     it("should return healthy when the node env is set", async () => {
+        expect.assertions(1);
+
         const result = await nodeEnvironmentCheck()();
 
         expect(result).toStrictEqual({
-            // eslint-disable-next-line sonarjs/no-duplicate-string
             displayName: "Node Environment Check",
             health: {
                 healthy: true,
+
                 timestamp: expect.any(String),
             },
             meta: {
-                env: process.env["NODE_ENV"],
+                env: process.env.NODE_ENV,
             },
         });
     });
 
     it("should return healthy when the node env is set to production", async () => {
-        const oldEnvironment = process.env["NODE_ENV"];
+        expect.assertions(1);
 
-        process.env["NODE_ENV"] = "production";
+        const oldEnvironment = process.env.NODE_ENV;
+
+        process.env.NODE_ENV = "production";
 
         const result = await nodeEnvironmentCheck("production")();
 
@@ -30,17 +34,20 @@ describe("node-environment-check", () => {
             displayName: "Node Environment Check",
             health: {
                 healthy: true,
+
                 timestamp: expect.any(String),
             },
             meta: {
-                env: process.env["NODE_ENV"],
+                env: process.env.NODE_ENV,
             },
         });
 
-        process.env["NODE_ENV"] = oldEnvironment;
+        process.env.NODE_ENV = oldEnvironment;
     });
 
     it("should return unhealthy when the node env is set to production", async () => {
+        expect.assertions(1);
+
         const result = await nodeEnvironmentCheck("production")();
 
         expect(result).toStrictEqual({
@@ -48,16 +55,18 @@ describe("node-environment-check", () => {
             health: {
                 healthy: false,
                 message: 'NODE_ENV environment variable is set to "test" instead of "production".',
+
                 timestamp: expect.any(String),
             },
         });
     });
 
     it("should return unhealthy when the node env is not set", async () => {
-        const oldEnvironment = process.env["NODE_ENV"];
+        expect.assertions(1);
 
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete process.env["NODE_ENV"];
+        const oldEnvironment = process.env.NODE_ENV;
+
+        delete process.env.NODE_ENV;
 
         const result = await nodeEnvironmentCheck()();
 
@@ -66,10 +75,11 @@ describe("node-environment-check", () => {
             health: {
                 healthy: false,
                 message: "Missing NODE_ENV environment variable. It can make some parts of the application misbehave",
+
                 timestamp: expect.any(String),
             },
         });
 
-        process.env["NODE_ENV"] = oldEnvironment;
+        process.env.NODE_ENV = oldEnvironment;
     });
 });

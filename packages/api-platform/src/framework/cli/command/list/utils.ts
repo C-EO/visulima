@@ -1,7 +1,12 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { parse } from "node:path";
 
-type AppExport = { [key: string]: any; app?: string | { app?: string } };
+import { parse } from "@visulima/path";
+import type { PackageJson } from "type-fest";
+
+interface AppExport {
+    [key: string]: any;
+    app?: string | { app?: string };
+}
 
 export const ALLOWED_EXTENSIONS = [".js", ".ts", ".mjs", ".cjs"];
 
@@ -9,6 +14,7 @@ export const getAppWorkingDirectoryPath = (appFilePath: string): string | null =
     let lastParsedPath = parse(appFilePath);
 
     // Once the following condition returns false it means we traversed the whole file system
+    // eslint-disable-next-line no-loops/no-loops
     while (lastParsedPath.base && lastParsedPath.root !== lastParsedPath.dir) {
         const parentDirectionItems = readdirSync(lastParsedPath.dir);
 
@@ -26,26 +32,26 @@ export const getAppWorkingDirectoryPath = (appFilePath: string): string | null =
 
 export const getFrameworkName = (directory: string): "express" | "fastify" | "hapi" | "koa" | "next" | null => {
     const packageJSONFilePath = `${directory}/package.json`;
-    const packageJSON = JSON.parse(readFileSync(packageJSONFilePath).toString());
-    const { dependencies } = packageJSON;
 
-    if (dependencies.express) {
+    const { dependencies } = JSON.parse(readFileSync(packageJSONFilePath).toString()) as PackageJson;
+
+    if (dependencies?.express) {
         return "express";
     }
 
-    if (dependencies.koa && (dependencies["@koa/router"] || dependencies["koa-router"])) {
+    if (dependencies?.koa && (dependencies["@koa/router"] || dependencies["koa-router"])) {
         return "koa";
     }
 
-    if (dependencies.next) {
+    if (dependencies?.next) {
         return "next";
     }
 
-    if (dependencies["@hapi/hapi"]) {
+    if (dependencies?.["@hapi/hapi"]) {
         return "hapi";
     }
 
-    if (dependencies.fastify) {
+    if (dependencies?.fastify) {
         return "fastify";
     }
 
@@ -60,8 +66,7 @@ export const getApp = (appExport: AppExport, frameworkName: "express" | "fastify
     }
 
     if (frameworkName === "hapi") {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (typeof (appExport.app as { app?: string })?.app === "string") {
+        if (typeof (appExport.app as { app?: string }).app === "string") {
             return appExport.app as { app: string };
         }
 

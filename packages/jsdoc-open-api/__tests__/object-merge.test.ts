@@ -4,15 +4,16 @@ import objectMerge from "../src/util/object-merge";
 
 describe("objectMerge", () => {
     it("merges path into empty path object", () => {
+        expect.assertions(1);
+
         const a = {
             paths: {},
         };
         const b = {
-            // eslint-disable-next-line sonarjs/no-duplicate-string
-            paths: { path1: { name: "test", description: "this is a test" } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
         const expected = {
-            paths: { path1: { name: "test", description: "this is a test" } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
 
         objectMerge(a, b);
@@ -21,12 +22,14 @@ describe("objectMerge", () => {
     });
 
     it("merges path into undefined", () => {
+        expect.assertions(1);
+
         const a = {};
         const b = {
-            paths: { path1: { name: "test", description: "this is a test" } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
         const expected = {
-            paths: { path1: { name: "test", description: "this is a test" } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
 
         objectMerge(a, b);
@@ -35,14 +38,16 @@ describe("objectMerge", () => {
     });
 
     it("merges path and component into nothing", () => {
+        expect.assertions(1);
+
         const a = {};
         const b = {
-            paths: { path1: { name: "test", description: "this is a test" } },
             components: { schemas: { fun: { name: "fun" }, fun2: { name: "fun2" } } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
         const expected = {
-            paths: { path1: { name: "test", description: "this is a test" } },
             components: { schemas: { fun: { name: "fun" }, fun2: { name: "fun2" } } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
 
         objectMerge(a, b);
@@ -51,30 +56,34 @@ describe("objectMerge", () => {
     });
 
     it("merges path without overriding other path", () => {
+        expect.assertions(1);
+
         const a = {
-            paths: { path1: { name: "test", description: "this is a test" } },
+            paths: { path1: { description: "this is a test", name: "test" } },
         };
         const b = {
-            paths: { path2: { name: "test", description: "this is a test" } },
+            paths: { path2: { description: "this is a test", name: "test" } },
         };
         const expected = {
             paths: {
-                path1: { name: "test", description: "this is a test" },
-                path2: { name: "test", description: "this is a test" },
+                path1: { description: "this is a test", name: "test" },
+                path2: { description: "this is a test", name: "test" },
             },
         };
 
-        objectMerge(a as any, b as any);
+        objectMerge(a as object, b as object);
 
         expect(a).toStrictEqual(expected);
     });
 
     it("merges 2 deep", () => {
+        expect.assertions(1);
+
         const a = {
             a: {
                 b: {
-                    name: "test",
                     description: "this is a test",
+                    name: "test",
                     old: "hi",
                 },
             },
@@ -82,34 +91,35 @@ describe("objectMerge", () => {
         const b = {
             a: {
                 b: {
-                    name: "test2",
-                    // eslint-disable-next-line sonarjs/no-duplicate-string
                     description: "this is a test2",
+                    name: "test2",
                 },
             },
         };
         const expected = {
             a: {
                 b: {
-                    name: "test2",
                     description: "this is a test2",
+                    name: "test2",
                     old: "hi",
                 },
             },
         };
 
-        objectMerge(a as any, b as any);
+        objectMerge(a as object, b as object);
 
         expect(a).toStrictEqual(expected);
     });
 
     it("overrides 3 deep", () => {
+        expect.assertions(1);
+
         const a = {
             a: {
                 b: {
                     c: {
-                        name: "test",
                         description: "this is a test",
+                        name: "test",
                         old: "hi",
                     },
                 },
@@ -119,8 +129,8 @@ describe("objectMerge", () => {
             a: {
                 b: {
                     c: {
-                        name: "test2",
                         description: "this is a test2",
+                        name: "test2",
                     },
                 },
             },
@@ -129,26 +139,28 @@ describe("objectMerge", () => {
             a: {
                 b: {
                     c: {
-                        name: "test2",
                         description: "this is a test2",
+                        name: "test2",
                     },
                 },
             },
         };
 
-        objectMerge(a as any, b as any);
+        objectMerge(a as object, b as object);
 
         expect(a).toStrictEqual(expected);
     });
 
     it("overrides 4 deep", () => {
+        expect.assertions(1);
+
         const a = {
             a: {
                 b: {
                     c: {
                         d: {
-                            name: "test",
                             description: "this is a test",
+                            name: "test",
                             old: "hi",
                         },
                     },
@@ -160,8 +172,8 @@ describe("objectMerge", () => {
                 b: {
                     c: {
                         d: {
-                            name: "test2",
                             description: "this is a test2",
+                            name: "test2",
                         },
                     },
                 },
@@ -172,15 +184,15 @@ describe("objectMerge", () => {
                 b: {
                     c: {
                         d: {
-                            name: "test2",
                             description: "this is a test2",
+                            name: "test2",
                         },
                     },
                 },
             },
         };
 
-        objectMerge(a as any, b as any);
+        objectMerge(a as object, b as object);
 
         expect(a).toStrictEqual(expected);
     });

@@ -1,77 +1,77 @@
-import { RouteType } from "../types.d";
-import type { SwaggerParameter } from "./types.d";
+import { RouteType } from "../types";
+import type { SwaggerParameter } from "./types";
 
 const queryParameters: Record<string, SwaggerParameter> = {
-    select: {
-        name: "select",
-        description: "Fields to select. For nested fields, chain them separated with a dot, eg: user.posts",
+    distinct: {
+        description: "Fields to distinctively retrieve",
+        name: "distinct",
         schema: {
             type: "string",
         },
     },
     include: {
-        name: "include",
         description: "Include relations, same as select",
-        schema: {
-            type: "string",
-        },
-    },
-    where: {
-        name: "where",
-        description: 'Fields to filter. See <a href="https://next-crud.js.org/query-params#where">the docs</a>',
-        schema: {
-            type: "string",
-        },
-    },
-    orderBy: {
-        name: "orderBy",
-        description: 'Field on which to order by a direction. See <a href="https://next-crud.js.org/query-params#orderBy">the docs</a>',
+        name: "include",
         schema: {
             type: "string",
         },
     },
     limit: {
-        name: "limit",
         description: "Maximum number of elements to retrieve",
+        name: "limit",
         schema: {
-            type: "integer",
             minimum: 0,
+            type: "integer",
         },
     },
-    skip: {
-        name: "skip",
-        description: "Number of rows to skip",
-        schema: {
-            type: "integer",
-            minimum: 0,
-        },
-    },
-    distinct: {
-        name: "distinct",
-        description: "Fields to distinctively retrieve",
+    orderBy: {
+        description: 'Field on which to order by a direction. See <a href="https://next-crud.js.org/query-params#orderBy">the docs</a>',
+        name: "orderBy",
         schema: {
             type: "string",
         },
     },
     page: {
-        name: "page",
         description: "Page number. Use only for pagination.",
+        name: "page",
         schema: {
-            type: "integer",
             minimum: 1,
+            type: "integer",
+        },
+    },
+    select: {
+        description: "Fields to select. For nested fields, chain them separated with a dot, eg: user.posts",
+        name: "select",
+        schema: {
+            type: "string",
+        },
+    },
+    skip: {
+        description: "Number of rows to skip",
+        name: "skip",
+        schema: {
+            minimum: 0,
+            type: "integer",
+        },
+    },
+    where: {
+        description: 'Fields to filter. See <a href="https://next-crud.js.org/query-params#where">the docs</a>',
+        name: "where",
+        schema: {
+            type: "string",
         },
     },
 };
 
-export const commonQueryParameters = [queryParameters["select"], queryParameters["include"]];
+export const commonQueryParameters = [queryParameters.select, queryParameters.include];
 export const listQueryParameters = [
     ...commonQueryParameters,
-    queryParameters["limit"],
-    queryParameters["skip"],
-    queryParameters["where"],
-    queryParameters["orderBy"],
-    queryParameters["page"],
-    queryParameters["distinct"],
+    queryParameters.limit,
+    queryParameters.skip,
+    queryParameters.where,
+    queryParameters.orderBy,
+    queryParameters.page,
+    queryParameters.distinct,
 ];
 
 export const getQueryParameters = (routeType: RouteType, additionalQueryParameters: SwaggerParameter[] = []): SwaggerParameter[] => {

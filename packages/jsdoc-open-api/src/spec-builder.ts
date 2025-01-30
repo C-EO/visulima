@@ -8,45 +8,59 @@ import type {
     SecurityRequirementObject,
     ServerObject,
     TagObject,
-} from "./exported.d";
+} from "./exported";
 import objectMerge from "./util/object-merge";
 
 class SpecBuilder implements OpenApiObject {
-    public openapi: string;
+    public components?: ComponentsObject;
+
+    public externalDocs?: ExternalDocumentationObject;
 
     public info: InfoObject;
 
-    public servers?: ServerObject[];
+    public openapi: string;
 
     public paths: PathsObject;
 
-    public components?: ComponentsObject;
-
     public security?: SecurityRequirementObject[];
 
-    public tags?: TagObject[];
+    public servers?: ServerObject[];
 
-    public externalDocs?: ExternalDocumentationObject;
+    public tags?: TagObject[];
 
     public constructor(baseDefinition: BaseDefinition) {
         this.openapi = baseDefinition.openapi;
         this.info = baseDefinition.info;
-        this.servers = baseDefinition.servers;
         this.paths = baseDefinition.paths ?? {};
-        this.components = baseDefinition.components;
-        this.security = baseDefinition.security;
-        this.tags = baseDefinition.tags;
-        this.externalDocs = baseDefinition.externalDocs;
+
+        if (baseDefinition.servers) {
+            this.servers = baseDefinition.servers;
+        }
+        if (baseDefinition.components) {
+            this.components = baseDefinition.components;
+        }
+
+        if (baseDefinition.security) {
+            this.security = baseDefinition.security;
+        }
+
+        if (baseDefinition.tags) {
+            this.tags = baseDefinition.tags;
+        }
+
+        if (baseDefinition.externalDocs) {
+            this.externalDocs = baseDefinition.externalDocs;
+        }
     }
 
     public addData(parsedFile: OpenApiObject[]): void {
         parsedFile.forEach((file) => {
-            const { paths, components, ...rest } = file;
+            const { components, paths, ...rest } = file;
 
             // only merge paths and components
             objectMerge(this, {
-                paths: paths ?? {},
                 components: components ?? {},
+                paths: paths ?? {},
             } as OpenApiObject);
 
             // overwrite everything else:

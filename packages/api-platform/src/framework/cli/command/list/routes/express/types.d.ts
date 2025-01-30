@@ -1,49 +1,46 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { IRoute, PathParams } from "@types/express-serve-static-core";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { Router } from "express";
 
-export interface Route extends IRoute {
-    stack: Layer[];
-    metadata?: any;
+export interface ExpressRegex extends RegExp {
+    fast_slash: boolean;
+
+    fast_star: boolean;
+}
+
+export interface Parameter {
+    [key: string]: any;
+    in: string;
     name: string;
+    required: boolean;
+}
+
+export interface RouteMetaData {
+    metadata?: any;
+    method: string;
+    path: string;
+    pathParams: Parameter[];
+}
+export interface Key {
+    name: string;
+    offset: number;
+    optional: boolean;
 }
 
 export interface Layer {
     handle?: Route | Router;
-    stack: Layer[];
-    route?: Route;
+    keys: Key[];
+    method: string;
     name: string;
     params?: PathParams;
     path?: string;
-    keys: Key[];
     regexp: ExpressRegex;
-    method: string;
+
+    route?: Route;
+    stack: Layer[];
 }
 
-export interface ExpressRegex extends RegExp {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    fast_slash: boolean;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    fast_star: boolean;
-}
-
-export interface RouteMetaData {
-    path: string;
-    pathParams: Parameter[];
-    method: string;
+export interface Route extends IRoute {
     metadata?: any;
-}
-
-export interface Parameter {
-    in: string;
     name: string;
-    required: boolean;
-    [key: string]: any;
-}
-
-export interface Key {
-    name: string;
-    optional: boolean;
-    offset: number;
+    stack: Layer[];
 }

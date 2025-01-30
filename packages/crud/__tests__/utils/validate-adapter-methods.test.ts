@@ -1,40 +1,48 @@
+// @ts-expect-error PrismaClient is not generated
 // eslint-disable-next-line max-classes-per-file
-import {
-    describe, expect, it, vi,
-} from "vitest";
+import { PrismaClient } from "@prisma/client";
+import { describe, expect, it, vi } from "vitest";
 
 import { PrismaAdapter } from "../../src";
 import validateAdapterMethods from "../../src/utils/validate-adapter-methods";
 
-// eslint-disable-next-line no-constructor-return
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class InvalidAdapter {}
+
+vi.mock("@prisma/client", () => {
+    return {
+        // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+        PrismaClient: class {
+            public constructor() {
+                // eslint-disable-next-line no-constructor-return
+                return {
+                    // eslint-disable-next-line compat/compat
+                    $connect: async () => await Promise.resolve(),
+                    // eslint-disable-next-line compat/compat
+                    $disconnect: async () => await Promise.resolve(),
+                };
+            }
+        },
+    };
+});
 
 describe("validateAdapterMethods", () => {
     it("should not throw a error for a valid adapter", () => {
-        expect(() => validateAdapterMethods(
-            new PrismaAdapter({
-                prismaClient: vi.mock("@prisma/client", () => {
-                    return {
-                        PrismaClient: class {
-                            public constructor() {
-                                // eslint-disable-next-line no-constructor-return
-                                return {
-                                    // eslint-disable-next-line compat/compat
-                                    $connect: () => Promise.resolve(),
-                                    // eslint-disable-next-line compat/compat
-                                    $disconnect: () => Promise.resolve(),
-                                };
-                            }
-                        },
-                    };
+        expect.assertions(1);
+
+        expect(() =>
+            validateAdapterMethods(
+                new PrismaAdapter({
+                    prismaClient: PrismaClient,
                 }),
-            }),
-        )).not.toThrowError();
+            ),
+        ).not.toThrow();
     });
 
     // @TODO: Add test for every method
     it("should throw a error for a invalid adapter", () => {
+        expect.assertions(1);
         // @ts-expect-error
-        expect(() => validateAdapterMethods(new InvalidAdapter())).toThrowErrorMatchingSnapshot();
+        expect(() => validateAdapterMethods(new InvalidAdapter())).toThrow('Adapter must implement the "create" method.');
     });
 });

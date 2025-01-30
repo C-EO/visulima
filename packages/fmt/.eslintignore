@@ -1,0 +1,14 @@
+dist
+node_modules
+__fixtures__
+coverage
+
+vitest.config.ts
+.prettierrc.cjs
+_meta.*.json
+packem.config.ts
+
+# TODO fix rules on bench files
+__tests__/*.bench.ts
+
+package.json

@@ -45,7 +45,7 @@ npm install @visulima/api-platform zod
 #### Installation for Next.js
 
 ```sh
-npm install @visulima/api-platform zod @visulima/readdir
+npm install @visulima/api-platform zod @visulima/fs
 ```
 
 ### Yarn
@@ -57,7 +57,7 @@ yarn add @visulima/api-platform zod
 #### Installation for Next.js
 
 ```sh
-yarn add @visulima/api-platform zod @visulima/readdir
+yarn add @visulima/api-platform zod @visulima/fs
 ```
 
 ### Pnpm
@@ -69,7 +69,7 @@ pnpm add @visulima/api-platform zod
 #### Installation for Next.js
 
 ```sh
-pnpm add @visulima/api-platform zod @visulima/readdir
+pnpm add @visulima/api-platform zod @visulima/fs
 ```
 
 ### To use the swagger-ui or the redoc-ui you need to install the following packages:
@@ -154,15 +154,15 @@ If you would like to help take a look at the [list of issues](https://github.com
 
 ## Credits
 
--   [Daniel Bannert](https://github.com/prisis)
--   [All Contributors](https://github.com/visulima/visulima/graphs/contributors)
+- [Daniel Bannert](https://github.com/prisis)
+- [All Contributors](https://github.com/visulima/visulima/graphs/contributors)
 
 ## License
 
 The visulima api-platform is open-sourced software licensed under the [MIT][license-url]
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
-[typescript-url]: "typescript"
+[typescript-url]: https://www.typescriptlang.org/ "TypeScript" "typescript"
 [license-image]: https://img.shields.io/npm/l/@visulima/api-platform?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md "license"
 [npm-image]: https://img.shields.io/npm/v/@visulima/api-platform/latest.svg?style=for-the-badge&logo=npm

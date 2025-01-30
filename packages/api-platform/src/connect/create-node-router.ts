@@ -1,5 +1,6 @@
-import { NodeRouter } from "@visulima/connect";
 import type { IncomingMessage, ServerResponse } from "node:http";
+
+import { NodeRouter } from "@visulima/connect";
 import type { AnyZodObject, ZodObject } from "zod";
 
 import type { ErrorHandlers } from "../error-handler/types";
@@ -13,21 +14,21 @@ const createNodeRouter = <
     Response extends ServerResponse,
     Schema extends AnyZodObject = ZodObject<{ body?: AnyZodObject; headers?: AnyZodObject; query?: AnyZodObject }>,
 >(
-        options: {
-            middlewares?: {
-                "http-header-normalizer"?: { canonical?: boolean; normalizeHeaderKey?: (key: string, canonical: boolean) => string };
-                serializers?: {
-                    serializers?: Serializers;
-                    defaultContentType?: string;
-                };
+    options: {
+        errorHandlers?: ErrorHandlers;
+        middlewares?: {
+            "http-header-normalizer"?: { canonical?: boolean; normalizeHeaderKey?: (key: string, canonical: boolean) => string };
+            serializers?: {
+                defaultContentType?: string;
+                serializers?: Serializers;
             };
-            errorHandlers?: ErrorHandlers;
-            showTrace?: boolean;
-        } = {},
-    ): NodeRouter<Request, Response, Schema> => {
+        };
+        showTrace?: boolean;
+    } = {},
+): NodeRouter<Request, Response, Schema> => {
     const router = new NodeRouter<Request, Response, Schema>({
-        onNoMatch,
         onError: onError(options.errorHandlers ?? [], options.showTrace ?? false),
+        onNoMatch,
     });
 
     return router

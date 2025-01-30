@@ -1,67 +1,86 @@
+const globals = require("@anolilab/eslint-config/globals");
+
 /** @ts-check */
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
-    root: true,
-    extends: [
-        "@anolilab/eslint-config",
-    ],
-    ignorePatterns: ["!**/*"],
     env: {
         // Your environments (which contains several predefined global variables)
-        browser: true,
-        node: false,
-        commonjs: true,
-        es6: true,
-        // mocha: true,
-        jest: false,
-        // jquery: true
+        // Most environments are loaded automatically if our rules are added
     },
+    extends: ["@anolilab/eslint-config", "@anolilab/eslint-config/typescript-type-checking"],
     globals: {
+        ...globals.es2021,
         // Your global variables (setting to false means it's not allowed to be reassigned)
-        //
         // myGlobal: false
     },
-    rules: {
-        // Customize your rules
-        "import/extensions": "off",
-        "unicorn/no-array-for-each": "off",
-        "unicorn/no-null": "off",
-        "unicorn/no-array-reduce": "off",
-
-        "no-restricted-imports": [
-            "error",
-            {
-                patterns: ["@mui/*/*/*", "!@mui/core/test-utils/*"],
-            },
-        ],
-        "max-len": ["error", { code: 160 }],
-    },
+    ignorePatterns: ["!**/*"],
     overrides: [
         {
-            files: ["*.ts", "*.tsx"],
-
-            parserOptions: {
-                project: "./tsconfig.eslint.json",
-                // eslint-disable-next-line no-undef
-                tsconfigRootDir: __dirname,
+            files: ["*.ts", "*.tsx", "*.mts", "*.cts", "*.js", "*.jsx", ".cjs", ".mjs"],
+            // Set parserOptions.project for the project to allow TypeScript to create the type-checker behind the scenes when we run linting
+            parserOptions: {},
+            rules: {},
+        },
+        {
+            files: ["*.test.ts", "*.bench.ts"],
+            // Set parserOptions.project for the project to allow TypeScript to create the type-checker behind the scenes when we run linting
+            parserOptions: {},
+            rules: {
+                "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off",
             },
         },
         {
-            files: ["*.ts", "*.tsx"],
-
-            parserOptions: {
-                project: "./tsconfig.eslint.json",
-                // eslint-disable-next-line no-undef
-                tsconfigRootDir: __dirname,
-            },
-
+            files: ["*.ts", "*.tsx", "*.mts", "*.cts"],
+            // Set parserOptions.project for the project to allow TypeScript to create the type-checker behind the scenes when we run linting
+            parserOptions: {},
+            // TODO: enable all new rules
             rules: {
-                "@typescript-eslint/no-unsafe-assignment": "off",
-                "@typescript-eslint/no-unsafe-member-access": "off",
-                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-base-to-string": "off",
+                "@typescript-eslint/no-explicit-any": "off",
+                "@typescript-eslint/no-redundant-type-constituents": "off",
+                "@typescript-eslint/no-unnecessary-condition": "off",
                 "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off",
                 "@typescript-eslint/no-unsafe-return": "off",
-            }
+                "@typescript-eslint/restrict-template-expressions": "off",
+
+                "security/detect-non-literal-fs-filename": "off",
+                "security/detect-object-injection": "off",
+
+                "vitest/no-conditional-expect": "off",
+                "vitest/no-conditional-in-test": "off",
+                "vitest/no-conditional-tests": "off",
+                "vitest/no-hooks": "off",
+            },
+        },
+        {
+            files: ["*.js", "*.jsx"],
+            rules: {},
+        },
+        {
+            files: ["*.mdx"],
+            rules: {
+                "jsx-a11y/anchor-has-content": "off",
+                // @see https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/917
+                "jsx-a11y/heading-has-content": "off",
+            },
         },
     ],
+    parserOptions: {
+        ecmaVersion: 2021,
+        project: "./tsconfig.eslint.json",
+        sourceType: "module",
+        tsconfigRootDir: __dirname,
+    },
+    // Report unused `eslint-disable` comments.
+    reportUnusedDisableDirectives: true,
+    root: true,
+    rules: {
+        // Customize your rules
+    },
 };

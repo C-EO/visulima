@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getRoutes > express > Express Routes 1`] = `
+exports[`getRoutes > express > express Routes 1`] = `
 [
   {
     "file": "unknown",
@@ -47,7 +47,7 @@ exports[`getRoutes > express > Express Routes 1`] = `
 ]
 `;
 
-exports[`getRoutes > fastify > Fastify Routes 1`] = `
+exports[`getRoutes > fastify > fastify Routes 1`] = `
 [
   {
     "file": "unknown",
@@ -88,7 +88,7 @@ exports[`getRoutes > fastify > Fastify Routes 1`] = `
 ]
 `;
 
-exports[`getRoutes > hapi > Hapi Routes 1`] = `
+exports[`getRoutes > hapi > hapi Routes 1`] = `
 [
   {
     "file": "unknown",
@@ -135,7 +135,7 @@ exports[`getRoutes > hapi > Hapi Routes 1`] = `
 ]
 `;
 
-exports[`getRoutes > koa > Koa Routes 1`] = `
+exports[`getRoutes > koa > koa Routes 1`] = `
 [
   {
     "file": "unknown",

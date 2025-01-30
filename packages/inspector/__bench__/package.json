@@ -1,0 +1,18 @@
+{
+    "name": "inspector-bench",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "test:bench": "vitest bench"
+    },
+    "dependencies": {
+        "@visulima/inspector": "workspace:*",
+        "loupe": "^3.1.2",
+        "object-inspect": "^1.13.3"
+    },
+    "devDependencies": {
+        "@types/object-inspect": "^1.13.0",
+        "typescript": "5.7.3",
+        "vitest": "^3.0.4"
+    }
+}

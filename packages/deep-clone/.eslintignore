@@ -1,0 +1,15 @@
+dist
+node_modules
+coverage
+__fixtures__
+
+vitest.config.ts
+_meta.*.json
+packem.config.ts
+.eslintrc.cjs
+.prettierrc.cjs
+.secretlintrc.cjs
+
+README.md
+
+package.json

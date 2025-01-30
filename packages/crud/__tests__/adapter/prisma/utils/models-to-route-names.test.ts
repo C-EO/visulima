@@ -4,6 +4,8 @@ import modelsToRouteNames from "../../../../src/adapter/prisma/utils/models-to-r
 
 describe("modelsToRouteNames", () => {
     it("should return a map of models to route names", () => {
+        expect.assertions(1);
+
         expect(
             modelsToRouteNames(
                 {
@@ -14,7 +16,7 @@ describe("modelsToRouteNames", () => {
                 },
                 ["User"],
             ),
-        ).toEqual({
+        ).toStrictEqual({
             User: "users",
         });
     });
